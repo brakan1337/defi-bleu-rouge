@@ -201,7 +201,7 @@ function renderMine() {
       <li class="${a.status === 'invalide' ? 'invalid' : ''}">
         <span class="dot ${me.team}"></span>
         <span class="what"><strong>${KIND_LABEL[a.kind]}</strong> · ${frDate(a.date, { weekday: 'short', day: 'numeric', month: 'short' })}
-          <span class="meta"><a href="${esc(a.stravaUrl)}" target="_blank" rel="noopener">Voir sur Strava</a></span></span>
+          ${a.stravaUrl ? `<span class="meta"><a href="${esc(a.stravaUrl)}" target="_blank" rel="noopener">Voir sur Strava</a></span>` : ''}</span>
         ${a.status === 'invalide' ? '<span class="tag">Invalidée</span>' : ''}
         <span class="km">${km(a.km)}</span>
         <button class="btn btn-small" data-delete="${a.id}" aria-label="Supprimer cette sortie">Suppr.</button>
@@ -260,7 +260,7 @@ async function loadFeed() {
       <li>
         <span class="dot ${a.team}"></span>
         <span class="what"><strong>${esc(a.pseudo)}</strong> · ${KIND_LABEL[a.kind]}
-          <span class="meta">${frDate(a.date, { day: 'numeric', month: 'short' })} · <a href="${esc(a.stravaUrl)}" target="_blank" rel="noopener">Strava</a></span></span>
+          <span class="meta">${frDate(a.date, { day: 'numeric', month: 'short' })}${a.stravaUrl ? ` · <a href="${esc(a.stravaUrl)}" target="_blank" rel="noopener">Strava</a>` : ''}</span></span>
         <span class="km">${km(a.km)}</span>
         ${a.mine ? '' : a.reported
           ? '<span class="tag">Signalée</span>'

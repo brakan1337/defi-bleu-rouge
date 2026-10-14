@@ -1,13 +1,13 @@
 # Défi Bleu contre Rouge
 
-Une webapp pour un défi de novembre : deux équipes, chaque participant déclare ses sorties de course ou de marche avec le lien Strava comme preuve. L'équipe qui cumule le plus de km le 30 novembre gagne.
+Une webapp pour un défi de novembre : deux équipes, chaque participant déclare ses sorties de course ou de marche ; le défi repose sur la confiance, le lien Strava est facultatif. L'équipe qui cumule le plus de km le 30 novembre gagne.
 
 Elle tourne sur un Worker Cloudflare avec une base D1. Le front est en HTML/JS sans build, dans `public/`. La connexion se fait avec Google, donc aucun e-mail n'est envoyé.
 
 ## Règles codées
 
 - **Affectation des équipes** : chaque équipe a une distance « attendue », égale à la somme des volumes hebdo déclarés × le nombre de semaines restantes à l'arrivée de chaque membre. Le nouveau rejoint l'équipe la moins dotée. Si l'écart est négligeable, il rejoint celle qui a le moins de membres, puis l'affectation se fait au hasard. Une personne qui arrive le 20 novembre pèse donc moins qu'une personne inscrite le 1er.
-- **Saisies** : uniquement des sorties datées du défi, jamais dans le futur, et un même lien Strava ne compte qu'une fois. Les saisies restent ouvertes `GRACE_DAYS` jours après la fin. Il n'y a pas de plafond par sortie, seulement une confirmation au-delà de 100 km et une limite technique à 2000 km.
+- **Saisies** : uniquement des sorties datées du défi, jamais dans le futur, et un même lien Strava, s'il est donné, ne compte qu'une fois. Les saisies restent ouvertes `GRACE_DAYS` jours après la fin. Il n'y a pas de plafond par sortie, seulement une confirmation au-delà de 100 km et une limite technique à 2000 km.
 - **Signalements** : n'importe quel participant peut signaler une sortie d'un autre. Les organisateurs (`ADMIN_EMAILS`) la traitent sur `/admin.html` : invalider retire les km du total.
 
 ## En local

@@ -292,7 +292,9 @@ async function addActivity(request, env, user) {
   if (date < c.start || date > c.end) throw new HttpError(400, `La sortie doit dater du défi (${frDate(c.start)} au ${frDate(c.end)}).`);
   if (date > c.today) throw new HttpError(400, 'La sortie ne peut pas être dans le futur.');
 
-  const strava = await parseStravaLink(String(body.stravaUrl || ''));
+  // Le lien Strava est facultatif (le défi repose sur la confiance) ; s'il est donné, il ne compte qu'une fois.
+  const rawLink = String(body.stravaUrl || '').trim();
+  const strava = rawLink ? await parseStravaLink(rawLink) : { url: null, key: null };
 
   try {
     await env.DB.prepare(

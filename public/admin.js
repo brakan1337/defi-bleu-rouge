@@ -24,7 +24,7 @@ async function load() {
         <li>
           <span class="dot ${a.team}"></span>
           <span class="what"><strong>${esc(a.pseudo)}</strong> · ${a.kind} · ${frDate(a.date)}
-            <span class="meta">${esc(a.email)} · <a href="${esc(a.stravaUrl)}" target="_blank" rel="noopener">Strava</a></span>
+            <span class="meta">${esc(a.email)}${a.stravaUrl ? ` · <a href="${esc(a.stravaUrl)}" target="_blank" rel="noopener">Strava</a>` : ' · sans lien Strava'}</span>
             <span class="meta">Signalé par ${esc(reporter)}${reason ? ` : « ${esc(reason)} »` : ''}</span></span>
           <span class="km">${kmFmt.format(a.km)} km</span>
           <button class="btn btn-small btn-danger" data-invalidate="${a.id}">Invalider</button>
