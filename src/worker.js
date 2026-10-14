@@ -186,13 +186,14 @@ async function onboard(request, env, user) {
   const weekly = Number(String(body.weeklyKm ?? '').replace(',', '.'));
   if (pseudo.length < 2 || pseudo.length > 30) throw new HttpError(400, 'Le pseudo doit faire entre 2 et 30 caractères.');
   if (!Number.isFinite(weekly) || weekly < 0 || weekly > 300) throw new HttpError(400, 'Volume hebdomadaire invalide.');
+  const gender = ['homme', 'femme'].includes(body.gender) ? body.gender : null;
 
   const c = challenge(env);
   const joinedOn = c.today > c.start ? c.today : c.start;
   const team = await pickTeam(env, c, joinedOn, weekly);
 
-  await env.DB.prepare('UPDATE users SET pseudo = ?, weekly_km = ?, team = ?, joined_on = ? WHERE id = ? AND team IS NULL')
-    .bind(pseudo, weekly, team, joinedOn, user.id).run();
+  await env.DB.prepare('UPDATE users SET pseudo = ?, weekly_km = ?, gender = ?, team = ?, joined_on = ? WHERE id = ? AND team IS NULL')
+    .bind(pseudo, weekly, gender, team, joinedOn, user.id).run();
   const saved = await env.DB.prepare('SELECT team FROM users WHERE id = ?').bind(user.id).first();
   return { team: saved.team };
 }
@@ -239,6 +240,7 @@ async function me(env, user) {
     pseudo: user.pseudo,
     email: user.email,
     team: user.team,
+    gender: user.gender,
     weeklyKm: user.weekly_km,
     joinedOn: user.joined_on,
     isAdmin: isAdmin(env, user),

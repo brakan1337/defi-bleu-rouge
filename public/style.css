@@ -88,33 +88,30 @@ h2 { font: 800 1.5rem/1.1 'Barlow Condensed', sans-serif; text-transform: upperc
 }
 .lane {
   position: relative;
-  height: 96px;
+  height: 144px;
   border-bottom: 2px dashed var(--track-line);
 }
-.lane-rouge { border-bottom: none; height: 172px; }
+.lane-rouge { border-bottom: none; height: 214px; }
 
 .runner {
   position: absolute;
-  bottom: 4px;
-  left: 4%;
+  bottom: 0;
+  left: 7%;
   width: 0;
   transition: left 1.2s cubic-bezier(.3,.8,.3,1);
 }
 .runner-svg {
   display: block;
-  width: 52px;
-  height: 60px;
-  margin-left: -26px;
-  filter: drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 1px #fff) drop-shadow(0 2px 1px rgba(0,0,0,0.3));
+  width: 86px;
+  height: 120px;
+  margin-left: -43px;
 }
 .runner-bleu { color: var(--bleu); }
 .runner-rouge { color: var(--rouge); }
-.runner-bleu .runner-svg, .runner-rouge .runner-svg { color: inherit; }
-.runner .runner-svg { --c: currentColor; }
 
 .bubble {
   position: absolute;
-  bottom: 64px;
+  bottom: 122px;
   left: 0;
   transform: translateX(-50%);
   background: #fff;
@@ -133,21 +130,39 @@ h2 { font: 800 1.5rem/1.1 'Barlow Condensed', sans-serif; text-transform: upperc
 .bubble strong { font: 800 1.35rem/1 'Barlow Condensed', sans-serif; }
 
 /* La bulle ne doit pas sortir de la piste sur les bords */
-.runner.edge-left .bubble { transform: translateX(-26px); }
-.runner.edge-right .bubble { transform: translateX(calc(-100% + 26px)); }
+.runner.edge-left .bubble { transform: translateX(-43px); }
+.runner.edge-right .bubble { transform: translateX(calc(-100% + 43px)); }
 
-.limb { transform-box: view-box; animation: swing 0.5s ease-in-out infinite alternate; }
-.arm-a, .arm-b { transform-origin: 26px 18px; }
-.leg-a, .leg-b { transform-origin: 22px 32px; }
-.arm-a, .leg-b { animation-direction: alternate-reverse; }
-.runner-svg { animation: bob 0.25s ease-in-out infinite alternate; }
-@keyframes swing { from { transform: rotate(-22deg); } to { transform: rotate(22deg); } }
+.fig * { transform-box: view-box; }
+.fig .body { animation: bob 0.32s ease-in-out infinite alternate; }
+.fig .leg-near { animation: thigh 0.64s ease-in-out infinite; }
+.fig .leg-far { animation: thigh 0.64s ease-in-out infinite -0.32s; }
+.fig .leg-near .shin { animation: shin 0.64s linear infinite; }
+.fig .leg-far .shin { animation: shin 0.64s linear infinite -0.32s; }
+.fig .arm-near { animation: arm 0.64s ease-in-out infinite -0.32s; }
+.fig .arm-far { animation: arm 0.64s ease-in-out infinite; }
+.fig .forearm { animation: forearm 0.64s ease-in-out infinite; }
+.fig .arm-near .forearm { animation-delay: -0.32s; }
+.fig .ponytail { animation: ponytail 0.32s ease-in-out infinite alternate; }
+@keyframes thigh { 0%, 100% { transform: rotate(-58deg); } 50% { transform: rotate(36deg); } }
+@keyframes shin {
+  0%, 100% { transform: rotate(18deg); }
+  35% { transform: rotate(14deg); }
+  50% { transform: rotate(42deg); }
+  70% { transform: rotate(108deg); }
+  88% { transform: rotate(62deg); }
+}
+@keyframes arm { 0%, 100% { transform: rotate(48deg); } 50% { transform: rotate(-50deg); } }
+@keyframes forearm { 0%, 100% { transform: rotate(-70deg); } 50% { transform: rotate(-105deg); } }
 @keyframes bob { from { transform: translateY(0); } to { transform: translateY(-3px); } }
-.race.idle .limb, .race.idle .runner-svg { animation: none; }
+@keyframes ponytail { from { transform: rotate(-8deg); } to { transform: rotate(10deg); } }
+/* Avant le départ et après l'arrivée : les coureurs attendent, debout. */
+.race.idle .fig * { animation: none !important; }
+.race.idle .fig .forearm { transform: rotate(-20deg); }
 
 .gap {
   position: absolute;
-  top: 172px;
+  top: 220px;
   height: 0;
   border-top: 2px solid #fff;
   transition: left 1.2s cubic-bezier(.3,.8,.3,1), width 1.2s cubic-bezier(.3,.8,.3,1);
@@ -223,6 +238,10 @@ input:focus, textarea:focus { outline: 2px solid var(--ink); outline-offset: 1px
 
 .kind-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
 .kind-switch label { display: block; }
+.kind-switch.three { grid-template-columns: repeat(3, 1fr); }
+.choice { border: none; margin: 0; padding: 0; display: grid; gap: 4px; min-width: 0; }
+.choice legend { font-weight: 500; font-size: 0.95rem; padding: 0; margin-bottom: 4px; }
+.reveal-figure { width: 110px; height: 154px; display: block; margin: 0 auto 8px; }
 .kind-switch input { position: absolute; opacity: 0; width: 1px; }
 .kind-switch span { display: block; text-align: center; padding: 10px; cursor: pointer; font-weight: 600; }
 .kind-switch input:checked + span { background: var(--ink); color: var(--card); }
@@ -292,6 +311,6 @@ footer a { color: var(--muted); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .limb, .runner-svg { animation: none !important; }
+  .fig * { animation: none !important; }
   .runner, .gap { transition: none; }
 }

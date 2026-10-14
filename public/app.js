@@ -2,15 +2,6 @@
 
 const TEAM_LABEL = { bleu: 'Bleu', rouge: 'Rouge' };
 const KIND_LABEL = { course: 'Course', marche: 'Marche' };
-const RUNNER_SVG = `
-  <g fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
-    <path class="limb arm-b" d="M26 18 L18 24 L13 20"/>
-    <path class="limb leg-b" d="M22 32 L15 42 L7 41"/>
-    <path d="M27 15 L22 32"/>
-    <path class="limb leg-a" d="M22 32 L30 41 L28 53"/>
-    <path class="limb arm-a" d="M26 18 L33 25 L39 20"/>
-  </g>
-  <circle cx="30" cy="8" r="6" fill="currentColor"/>`;
 
 const $ = (id) => document.getElementById(id);
 let config = null;
@@ -35,6 +26,16 @@ async function api(path, options = {}) {
 }
 
 // ---------- La course ----------
+
+// Les deux coureurs ont le sexe du participant connecté. Sans réponse (ou pas connecté) : un de chaque.
+let drawnFor = null;
+function renderRunners() {
+  const gender = me?.gender || null;
+  if (drawnFor === (gender || 'mixte')) return;
+  drawnFor = gender || 'mixte';
+  $('runner-bleu').querySelector('svg').innerHTML = drawRunner(gender || 'homme', 'bleu');
+  $('runner-rouge').querySelector('svg').innerHTML = drawRunner(gender || 'femme', 'rouge');
+}
 
 const START = 7;      // position de départ, en % de la piste
 const FRONT = 84;     // position du coureur en tête
@@ -117,6 +118,7 @@ async function loadMe() {
     if (err.status !== 401) throw err;
     me = null;
   }
+  renderRunners();
   $('logout').hidden = !me;
   $('admin-link').hidden = !me?.isAdmin;
 
@@ -160,7 +162,9 @@ $('onboard-form').addEventListener('submit', async (e) => {
   const f = e.target;
   $('onboard-error').textContent = '';
   try {
-    const { team } = await api('/api/onboard', { method: 'POST', body: { pseudo: f.pseudo.value, weeklyKm: f.weeklyKm.value } });
+    const gender = f.gender.value;
+    const { team } = await api('/api/onboard', { method: 'POST', body: { pseudo: f.pseudo.value, weeklyKm: f.weeklyKm.value, gender } });
+    $('reveal-figure').innerHTML = drawRunner(gender || (team === 'bleu' ? 'homme' : 'femme'), team);
     $('reveal-team').textContent = TEAM_LABEL[team];
     $('reveal-team').className = `reveal-team t-${team}`;
     show('view-reveal');
@@ -283,7 +287,6 @@ $('report-dialog').addEventListener('close', async () => {
 // ---------- Démarrage ----------
 
 (async function init() {
-  for (const svg of document.querySelectorAll('.runner-svg')) svg.innerHTML = RUNNER_SVG;
   config = await api('/api/config');
   renderCountdown();
   await Promise.all([loadState(), loadMe()]);
