@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Défi Bleu contre Rouge</title>
+  <meta name="description" content="Un mois, deux équipes, chaque kilomètre compte.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M0 0h16v32H0z' fill='%232458d6'/><path d='M16 0h16v32H16z' fill='%23d8322b'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <p class="kicker" id="period">Défi de novembre</p>
+    <h1><span class="t-bleu">Bleu</span> <span class="vs">contre</span> <span class="t-rouge">Rouge</span></h1>
+    <p class="countdown" id="countdown"></p>
+  </header>
+
+  <main>
+    <section class="card race-card" aria-label="La course">
+      <div class="race" id="race">
+        <div class="lane lane-bleu">
+          <div class="runner runner-bleu" id="runner-bleu">
+            <div class="bubble"><span class="bubble-team">Bleu</span><strong id="km-bleu">0 km</strong></div>
+            <svg class="runner-svg" viewBox="0 0 48 56" aria-hidden="true"></svg>
+          </div>
+        </div>
+        <div class="gap" id="gap"><span id="gap-label"></span></div>
+        <div class="lane lane-rouge">
+          <div class="runner runner-rouge" id="runner-rouge">
+            <div class="bubble"><span class="bubble-team">Rouge</span><strong id="km-rouge">0 km</strong></div>
+            <svg class="runner-svg" viewBox="0 0 48 56" aria-hidden="true"></svg>
+          </div>
+        </div>
+      </div>
+      <p class="lead-line" id="lead-line">La course n'a pas encore commencé.</p>
+      <div class="teams">
+        <div class="team-stat team-bleu">
+          <span class="team-name">Équipe Bleu</span>
+          <span id="stat-bleu"></span>
+        </div>
+        <div class="team-stat team-rouge">
+          <span class="team-name">Équipe Rouge</span>
+          <span id="stat-rouge"></span>
+        </div>
+      </div>
+      <p class="updated" id="updated"></p>
+    </section>
+
+    <!-- Pas connecté -->
+    <section class="card" id="view-login" hidden>
+      <h2>Rejoindre le défi</h2>
+      <p>Tu ne choisis pas ton équipe : on t'affecte à celle qui en a le plus besoin pour que la course reste serrée. Tu peux rejoindre à tout moment du mois.</p>
+      <div id="google-btn"></div>
+      <form class="dev-login" id="dev-login" hidden>
+        <p class="hint">Mode test local : connexion sans Google.</p>
+        <input type="email" name="email" placeholder="test@exemple.fr" required>
+        <button type="submit" class="btn">Se connecter (test)</button>
+      </form>
+    </section>
+
+    <!-- Connecté, pas encore d'équipe -->
+    <section class="card" id="view-onboard" hidden>
+      <h2>Ton inscription</h2>
+      <form id="onboard-form" class="form">
+        <label>Pseudo affiché
+          <input name="pseudo" minlength="2" maxlength="30" required autocomplete="nickname">
+        </label>
+        <label>Combien de km fais-tu par semaine en temps normal ?
+          <span class="hint">Course et marche cumulées, en moyenne. Ça sert seulement à équilibrer les équipes.</span>
+          <input name="weeklyKm" type="number" inputmode="decimal" min="0" max="300" step="1" required>
+        </label>
+        <button class="btn btn-primary" type="submit">Découvrir mon équipe</button>
+        <p class="error" id="onboard-error"></p>
+      </form>
+    </section>
+
+    <!-- Révélation de l'équipe -->
+    <section class="card reveal" id="view-reveal" hidden>
+      <p>Tu cours pour l'équipe</p>
+      <p class="reveal-team" id="reveal-team"></p>
+      <button class="btn btn-primary" id="reveal-ok">C'est parti</button>
+    </section>
+
+    <!-- Participant -->
+    <div id="view-member" hidden>
+      <section class="card mine" id="mine">
+        <p class="kicker">Ta contribution · <span id="my-pseudo"></span></p>
+        <p class="my-km"><strong id="my-km">0 km</strong></p>
+        <div class="share-bar"><div class="share-fill" id="share-fill"></div></div>
+        <p class="share-text" id="share-text"></p>
+      </section>
+
+      <section class="card">
+        <h2>Ajouter une sortie</h2>
+        <form id="activity-form" class="form">
+          <div class="kind-switch" role="radiogroup" aria-label="Type de sortie">
+            <label><input type="radio" name="kind" value="course" checked><span>Course</span></label>
+            <label><input type="radio" name="kind" value="marche"><span>Marche</span></label>
+          </div>
+          <div class="row">
+            <label>Distance (km)
+              <input name="distanceKm" inputmode="decimal" placeholder="10,4" required>
+            </label>
+            <label>Date
+              <input name="date" type="date" required>
+            </label>
+          </div>
+          <label>Lien de la sortie Strava
+            <input name="stravaUrl" type="url" placeholder="https://www.strava.com/activities/…" required>
+            <span class="hint">Dans Strava : ta sortie, puis Partager, puis Copier le lien.</span>
+          </label>
+          <button class="btn btn-primary" type="submit" id="activity-submit">Ajouter mes km</button>
+          <p class="error" id="activity-error"></p>
+          <p class="success" id="activity-success"></p>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Mes sorties</h2>
+        <ul class="list" id="my-list"></ul>
+      </section>
+
+      <section class="card">
+        <h2>Dernières sorties</h2>
+        <p class="hint">Une sortie te paraît douteuse ? Signale-la, un organisateur vérifiera.</p>
+        <ul class="list" id="feed"></ul>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <a href="confidentialite.html">Données personnelles</a>
+    <a href="admin.html" id="admin-link" hidden>Signalements</a>
+    <button class="link" id="logout" hidden>Se déconnecter</button>
+  </footer>
+
+  <dialog id="report-dialog">
+    <form method="dialog" id="report-form" class="form">
+      <h2>Signaler cette sortie</h2>
+      <p id="report-what" class="hint"></p>
+      <label>Pourquoi ? (facultatif)
+        <textarea name="reason" maxlength="300" rows="3" placeholder="Distance incohérente, sortie en vélo, doublon…"></textarea>
+      </label>
+      <div class="row-end">
+        <button class="btn" value="cancel" formnovalidate>Annuler</button>
+        <button class="btn btn-danger" value="send" id="report-send">Signaler</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <script src="https://accounts.google.com/gsi/client" async></script>
+  <script src="app.js"></script>
+</body>
+</html>

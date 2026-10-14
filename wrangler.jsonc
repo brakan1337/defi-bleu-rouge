@@ -1,0 +1,23 @@
+// Déploiement : npm run db:migrate puis npm run deploy (voir README.md).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "defi-bleu-rouge",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "defi-db", "database_id": "REMPLACER_PAR_ID_D1", "migrations_dir": "migrations" }
+  ],
+  "vars": {
+    "GOOGLE_CLIENT_ID": "",
+    "ADMIN_EMAILS": "contact@pablomarin.fr",
+    "CHALLENGE_START": "2026-11-01",
+    "CHALLENGE_END": "2026-11-30",
+    "GRACE_DAYS": "2"
+  },
+  "observability": { "enabled": true }
+}
