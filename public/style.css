@@ -88,10 +88,10 @@ h2 { font: 800 1.5rem/1.1 'Barlow Condensed', sans-serif; text-transform: upperc
 }
 .lane {
   position: relative;
-  height: 144px;
+  height: 156px;
   border-bottom: 2px dashed var(--track-line);
 }
-.lane-rouge { border-bottom: none; height: 214px; }
+.lane-rouge { border-bottom: none; height: 226px; }
 
 .runner {
   position: absolute;
@@ -100,18 +100,21 @@ h2 { font: 800 1.5rem/1.1 'Barlow Condensed', sans-serif; text-transform: upperc
   width: 0;
   transition: left 1.2s cubic-bezier(.3,.8,.3,1);
 }
-.runner-svg {
+.runner-img {
   display: block;
-  width: 86px;
   height: 120px;
-  margin-left: -43px;
+  width: auto;
+  margin-left: -52px;
+  filter: drop-shadow(0 4px 3px rgba(0,0,0,0.3));
+  transform-origin: 50% 100%;
+  animation: stride 0.3s ease-in-out infinite alternate;
 }
 .runner-bleu { color: var(--bleu); }
 .runner-rouge { color: var(--rouge); }
 
 .bubble {
   position: absolute;
-  bottom: 122px;
+  bottom: 134px;
   left: 0;
   transform: translateX(-50%);
   background: #fff;
@@ -133,36 +136,16 @@ h2 { font: 800 1.5rem/1.1 'Barlow Condensed', sans-serif; text-transform: upperc
 .runner.edge-left .bubble { transform: translateX(-43px); }
 .runner.edge-right .bubble { transform: translateX(calc(-100% + 43px)); }
 
-.fig * { transform-box: view-box; }
-.fig .body { animation: bob 0.32s ease-in-out infinite alternate; }
-.fig .leg-near { animation: thigh 0.64s ease-in-out infinite; }
-.fig .leg-far { animation: thigh 0.64s ease-in-out infinite -0.32s; }
-.fig .leg-near .shin { animation: shin 0.64s linear infinite; }
-.fig .leg-far .shin { animation: shin 0.64s linear infinite -0.32s; }
-.fig .arm-near { animation: arm 0.64s ease-in-out infinite -0.32s; }
-.fig .arm-far { animation: arm 0.64s ease-in-out infinite; }
-.fig .forearm { animation: forearm 0.64s ease-in-out infinite; }
-.fig .arm-near .forearm { animation-delay: -0.32s; }
-.fig .ponytail { animation: ponytail 0.32s ease-in-out infinite alternate; }
-@keyframes thigh { 0%, 100% { transform: rotate(-58deg); } 50% { transform: rotate(36deg); } }
-@keyframes shin {
-  0%, 100% { transform: rotate(18deg); }
-  35% { transform: rotate(14deg); }
-  50% { transform: rotate(42deg); }
-  70% { transform: rotate(108deg); }
-  88% { transform: rotate(62deg); }
+@keyframes stride {
+  from { transform: translateY(0) rotate(0deg); }
+  to { transform: translateY(-6px) rotate(-2deg); }
 }
-@keyframes arm { 0%, 100% { transform: rotate(48deg); } 50% { transform: rotate(-50deg); } }
-@keyframes forearm { 0%, 100% { transform: rotate(-70deg); } 50% { transform: rotate(-105deg); } }
-@keyframes bob { from { transform: translateY(0); } to { transform: translateY(-3px); } }
-@keyframes ponytail { from { transform: rotate(-8deg); } to { transform: rotate(10deg); } }
-/* Avant le départ et après l'arrivée : les coureurs attendent, debout. */
-.race.idle .fig * { animation: none !important; }
-.race.idle .fig .forearm { transform: rotate(-20deg); }
+/* Avant le départ et après l'arrivée, les coureurs ne bougent pas. */
+.race.idle .runner-img { animation: none; }
 
 .gap {
   position: absolute;
-  top: 220px;
+  top: 232px;
   height: 0;
   border-top: 2px solid #fff;
   transition: left 1.2s cubic-bezier(.3,.8,.3,1), width 1.2s cubic-bezier(.3,.8,.3,1);
@@ -241,7 +224,7 @@ input:focus, textarea:focus { outline: 2px solid var(--ink); outline-offset: 1px
 .kind-switch.three { grid-template-columns: repeat(3, 1fr); }
 .choice { border: none; margin: 0; padding: 0; display: grid; gap: 4px; min-width: 0; }
 .choice legend { font-weight: 500; font-size: 0.95rem; padding: 0; margin-bottom: 4px; }
-.reveal-figure { width: 110px; height: 154px; display: block; margin: 0 auto 8px; }
+.reveal-figure { height: 160px; width: auto; display: block; margin: 0 auto 8px; }
 .kind-switch input { position: absolute; opacity: 0; width: 1px; }
 .kind-switch span { display: block; text-align: center; padding: 10px; cursor: pointer; font-weight: 600; }
 .kind-switch input:checked + span { background: var(--ink); color: var(--card); }
@@ -311,6 +294,6 @@ footer a { color: var(--muted); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fig * { animation: none !important; }
+  .runner-img { animation: none !important; }
   .runner, .gap { transition: none; }
 }

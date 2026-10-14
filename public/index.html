@@ -23,14 +23,14 @@
         <div class="lane lane-bleu">
           <div class="runner runner-bleu" id="runner-bleu">
             <div class="bubble"><span class="bubble-team">Bleu</span><strong id="km-bleu">0 km</strong></div>
-            <svg class="runner-svg fig" viewBox="0 0 100 140" aria-hidden="true"></svg>
+            <img class="runner-img" alt="">
           </div>
         </div>
         <div class="gap" id="gap"><span id="gap-label"></span></div>
         <div class="lane lane-rouge">
           <div class="runner runner-rouge" id="runner-rouge">
             <div class="bubble"><span class="bubble-team">Rouge</span><strong id="km-rouge">0 km</strong></div>
-            <svg class="runner-svg fig" viewBox="0 0 100 140" aria-hidden="true"></svg>
+            <img class="runner-img" alt="">
           </div>
         </div>
       </div>
@@ -87,7 +87,7 @@
 
     <!-- Révélation de l'équipe -->
     <section class="card reveal" id="view-reveal" hidden>
-      <svg class="reveal-figure fig" id="reveal-figure" viewBox="0 0 100 140" aria-hidden="true"></svg>
+      <img class="reveal-figure" id="reveal-figure" alt="">
       <p>Tu cours pour l'équipe</p>
       <p class="reveal-team" id="reveal-team"></p>
       <button class="btn btn-primary" id="reveal-ok">C'est parti</button>
@@ -162,7 +162,6 @@
 
 
   <script src="https://accounts.google.com/gsi/client" async></script>
-  <script src="figure.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

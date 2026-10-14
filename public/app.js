@@ -29,12 +29,13 @@ async function api(path, options = {}) {
 
 // Les deux coureurs ont le sexe du participant connecté. Sans réponse (ou pas connecté) : un de chaque.
 let drawnFor = null;
+const runnerImage = (gender, team) => `img/${gender}-${team}.png`;
 function renderRunners() {
   const gender = me?.gender || null;
   if (drawnFor === (gender || 'mixte')) return;
   drawnFor = gender || 'mixte';
-  $('runner-bleu').querySelector('svg').innerHTML = drawRunner(gender || 'homme', 'bleu');
-  $('runner-rouge').querySelector('svg').innerHTML = drawRunner(gender || 'femme', 'rouge');
+  $('runner-bleu').querySelector('img').src = runnerImage(gender || 'homme', 'bleu');
+  $('runner-rouge').querySelector('img').src = runnerImage(gender || 'femme', 'rouge');
 }
 
 const START = 7;      // position de départ, en % de la piste
@@ -164,7 +165,7 @@ $('onboard-form').addEventListener('submit', async (e) => {
   try {
     const gender = f.gender.value;
     const { team } = await api('/api/onboard', { method: 'POST', body: { pseudo: f.pseudo.value, weeklyKm: f.weeklyKm.value, gender } });
-    $('reveal-figure').innerHTML = drawRunner(gender || (team === 'bleu' ? 'homme' : 'femme'), team);
+    $('reveal-figure').src = runnerImage(gender || (team === 'bleu' ? 'homme' : 'femme'), team);
     $('reveal-team').textContent = TEAM_LABEL[team];
     $('reveal-team').className = `reveal-team t-${team}`;
     show('view-reveal');
