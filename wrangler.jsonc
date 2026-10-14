@@ -10,10 +10,10 @@
     "run_worker_first": ["/api/*"]
   },
   "d1_databases": [
-    { "binding": "DB", "database_name": "defi-db", "database_id": "REMPLACER_PAR_ID_D1", "migrations_dir": "migrations" }
+    { "binding": "DB", "database_name": "defi-db", "database_id": "2d3f563f-a636-42b6-9f92-4854df426b70", "migrations_dir": "migrations" }
   ],
   "vars": {
-    "GOOGLE_CLIENT_ID": "",
+    "GOOGLE_CLIENT_ID": "527830323798-7nkh3tuvkr1398ogvothfv895g8k6jfm.apps.googleusercontent.com",
     "ADMIN_EMAILS": "contact@pablomarin.fr",
     "CHALLENGE_START": "2026-11-01",
     "CHALLENGE_END": "2026-11-30",
